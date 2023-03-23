@@ -284,6 +284,10 @@
                   <shadedPattern>org.apache.hudi.org.apache.hadoop.metrics2.util.MetricSampleQuantiles
                   </shadedPattern>
                 </relocation>
+                <relocation>
+                  <pattern>org.apache.parquet</pattern>
+                  <shadedPattern>${flink.bundle.shade.prefix}org.apache.parquet</shadedPattern>
+                </relocation>
               </relocations>
               <filters>
                 <filter>
@@ -329,6 +333,10 @@
           <artifactId>rocksdbjni</artifactId>
           <groupId>org.rocksdb</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>avro</artifactId>
+          <groupId>org.apache.avro</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -365,6 +373,10 @@
         <exclusion>
           <artifactId>guava</artifactId>
           <groupId>com.google.guava</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>avro</artifactId>
+          <groupId>org.apache.avro</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -458,6 +470,10 @@
           <groupId>it.unimi.dsi</groupId>
           <artifactId>fastutil</artifactId>
         </exclusion>
+        <exclusion>
+          <artifactId>avro</artifactId>
+          <groupId>org.apache.avro</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -518,6 +534,10 @@
           <groupId>org.pentaho</groupId>
           <artifactId>*</artifactId>
         </exclusion>
+        <exclusion>
+          <artifactId>avro</artifactId>
+          <groupId>org.apache.avro</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -547,6 +567,10 @@
         <exclusion>
           <artifactId>guava</artifactId>
           <groupId>com.google.guava</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>avro</artifactId>
+          <groupId>org.apache.avro</groupId>
         </exclusion>
       </exclusions>
     </dependency>

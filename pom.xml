@@ -102,7 +102,8 @@
     <confluent.version>5.3.4</confluent.version>
     <glassfish.version>2.17</glassfish.version>
     <glassfish.el.version>3.0.1-b12</glassfish.el.version>
-    <parquet.version>1.10.1</parquet.version>
+<!--    <parquet.version>1.10.1</parquet.version>-->
+    <parquet.version>1.12.2</parquet.version>
     <junit.jupiter.version>5.7.2</junit.jupiter.version>
     <junit.vintage.version>5.7.2</junit.vintage.version>
     <junit.platform.version>1.7.2</junit.platform.version>
@@ -110,7 +111,7 @@
     <log4j2.version>2.17.2</log4j2.version>
     <slf4j.version>1.7.36</slf4j.version>
     <joda.version>2.9.9</joda.version>
-    <hadoop.version>2.10.1</hadoop.version>
+    <hadoop.version>3.1.1</hadoop.version>
     <hive.groupid>org.apache.hive</hive.groupid>
     <hive.version>2.3.1</hive.version>
     <hive.parquet.version>1.10.1</hive.parquet.version>
@@ -156,7 +157,7 @@
                (hudi.spark.common.modules.*) -->
     <hudi.spark.common.modules.1>hudi-spark2-common</hudi.spark.common.modules.1>
     <hudi.spark.common.modules.2/>
-    <avro.version>1.8.2</avro.version>
+    <avro.version>1.10.0</avro.version>
     <caffeine.version>2.9.1</caffeine.version>
     <scala11.version>2.11.12</scala11.version>
     <scala12.version>2.12.10</scala12.version>
@@ -198,8 +199,8 @@
     <zk-curator.version>2.7.1</zk-curator.version>
     <antlr.version>4.7</antlr.version>
     <aws.sdk.version>1.12.22</aws.sdk.version>
-    <proto.version>3.21.5</proto.version>
-    <protoc.version>3.21.5</protoc.version>
+    <proto.version>3.11.4</proto.version>
+    <protoc.version>3.11.4</protoc.version>
     <dynamodb.lockclient.version>1.1.0</dynamodb.lockclient.version>
     <zookeeper.version>3.5.7</zookeeper.version>
     <openjdk.jol.version>0.16</openjdk.jol.version>
@@ -1958,7 +1959,7 @@
       </modules>
       <properties>
         <skip.hudi-spark3.unit.tests>true</skip.hudi-spark3.unit.tests>
-        <avro.version>1.8.2</avro.version>
+        <avro.version>1.10.0</avro.version>
       </properties>
       <activation>
         <activeByDefault>true</activeByDefault>
