@@ -17,22 +17,28 @@
 
 package org.apache.spark.sql.hudi.analysis
 
+import org.apache.hudi.common.table.HoodieTableMetaClient
 import org.apache.hudi.{DefaultSource, SparkAdapterSupport}
+import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.catalyst.analysis.{ResolvedTable, UnresolvedPartitionSpec}
 import org.apache.spark.sql.catalyst.catalog.{CatalogTable, HoodieCatalogTable}
 import org.apache.spark.sql.catalyst.expressions.{Alias, Attribute}
+import org.apache.spark.sql.catalyst.plans.logcal.{HoodieQuery, HoodieQueryWithKV}
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.catalyst.rules.Rule
 import org.apache.spark.sql.connector.catalog.CatalogV2Implicits.IdentifierHelper
 import org.apache.spark.sql.connector.catalog.{Table, V1Table}
 import org.apache.spark.sql.execution.datasources.LogicalRelation
+import org.apache.spark.sql.execution.datasources.PreWriteCheck.failAnalysis
 import org.apache.spark.sql.execution.datasources.v2.DataSourceV2Relation
-import org.apache.spark.sql.hudi.HoodieSqlCommonUtils.{castIfNeeded, removeMetaFields}
-import org.apache.spark.sql.hudi.ProvidesHoodieConfig
+import org.apache.spark.sql.hudi.HoodieSqlCommonUtils.{castIfNeeded, getTableLocation, removeMetaFields, tableExistsInPath}
 import org.apache.spark.sql.hudi.catalog.HoodieInternalV2Table
 import org.apache.spark.sql.hudi.command.{AlterHoodieTableDropPartitionCommand, ShowHoodieTablePartitionsCommand, TruncateHoodieTableCommand}
+import org.apache.spark.sql.hudi.{HoodieSqlCommonUtils, ProvidesHoodieConfig}
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{SQLContext, SparkSession}
+import org.apache.spark.sql.{AnalysisException, SQLContext, SparkSession}
+
+import scala.collection.JavaConverters.mapAsJavaMapConverter
 
 /**
  * NOTE: PLEASE READ CAREFULLY
@@ -61,12 +67,17 @@ class HoodieSpark3Analysis(sparkSession: SparkSession) extends Rule[LogicalPlan]
   override def apply(plan: LogicalPlan): LogicalPlan = plan.resolveOperatorsDown {
     case s @ InsertIntoStatement(r @ DataSourceV2Relation(v2Table: HoodieInternalV2Table, _, _, _, _), partitionSpec, _, _, _, _)
       if s.query.resolved && needsSchemaAdjustment(s.query, v2Table.hoodieCatalogTable.table, partitionSpec, r.schema) =>
-      val projection = resolveQueryColumnsByOrdinal(s.query, r.output)
-      if (projection != s.query) {
-        s.copy(query = projection)
-      } else {
-        s
-      }
+        val projection = resolveQueryColumnsByOrdinal(s.query, r.output)
+        if (projection != s.query) {
+          s.copy(query = projection)
+        } else {
+          s
+        }
+    case query: HoodieQuery =>
+      HoodieQuery.resolve(sparkSession, query)
+
+    case q: HoodieQueryWithKV =>
+      HoodieQueryWithKV.resolve(sparkSession, q)
   }
 
   /**
@@ -163,3 +174,4 @@ private[sql] object HoodieV1OrV2Table extends SparkAdapterSupport {
     case _ => None
   }
 }
+
